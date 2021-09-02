@@ -1,5 +1,7 @@
 # Employee CRM
 
+[View on Vercel](https://p33-crm.vercel.app)
+
 Build during the Principal33 Internship - Frontend Workshop led by the wonderful Marian.
 
 # Task List
@@ -8,16 +10,18 @@ Veti construi un CMS (content management system) pentru angajati. Mai pe inteles
 Inca nu legam tabelul la un backend, momentan ne focusam pe input si output local. Taskul urmator se va focusa pe integrare cu backend.
 
 Informatiile care se cer despre angajati:
- - Nume
- - Prenume
- - Email
- - Sex
- - Data nasterii
- - BONUS: poza
+
+-   Nume
+-   Prenume
+-   Email
+-   Sex
+-   Data nasterii
+-   BONUS: poza
 
 Userul trebuie sa poata face input la toate datele astea intr-o pagina web. Informatiile vor fi afisate intr-un tabel, in aceeasi pagina.
 
 ## Mentiuni:
+
 Ne intereseaza functionalitatea, nu designul
 
 Git repository nou, stiti deja cum sta treaba cu commit-uri clar definite, cu mesaje clare
@@ -39,4 +43,4 @@ BONUS: angajatii pot sa fie filtrati dupa sex / data nasterii / daca au poza sau
 BONUS: search bar pentru cautarea angajatilor - rezultatele vor fi afisate in tabel (practic filtrare dupa string)  
 BONUS: persistenta cu JSON local sau local storage  
 BONUS: make it look good  
-BONUS: input de date cu un modal  
+BONUS: input de date cu un modal
