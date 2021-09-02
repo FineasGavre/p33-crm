@@ -5,30 +5,52 @@ html {
     font-family: 'JetBrains Mono', monospace, sans-serif, serif;
 }
 
+h1,
+h2,
+h3 {
+    margin: 0;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+
 .wrapper {
     display: flex;
     flex-direction: column;
+    gap: 2rem;
 }
 
 .title-section {
     display: inline-flex;
     justify-content: center;
+
+    margin-top: 2rem;
+
+    color: white;
 }
 
-.new-employee-section {
+.card-section {
     display: flex;
     flex-direction: column;
+    gap: 1rem;
 
     margin-left: 4rem;
     margin-right: 4rem;
 
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
     padding-left: 2rem;
     padding-right: 2rem;
 
     border: 1px solid rgba(0, 0, 0, 0.65);
     border-radius: 0.5rem;
+
+    background-color: white;
 }
 
 .form-group {
@@ -49,4 +71,48 @@ html {
 }
 
 .form-group > .field > input {
+}
+
+/* Animated gradient background */
+html {
+    background: linear-gradient(270deg, #ff00cc, #333399);
+    background-size: 400% 400%;
+
+    -webkit-animation: MainGradientAnimation 10s ease infinite;
+    -moz-animation: MainGradientAnimation 10s ease infinite;
+    animation: MainGradientAnimation 10s ease infinite;
+}
+
+@-webkit-keyframes MainGradientAnimation {
+    0% {
+        background-position: 0% 45%;
+    }
+    50% {
+        background-position: 100% 56%;
+    }
+    100% {
+        background-position: 0% 45%;
+    }
+}
+@-moz-keyframes MainGradientAnimation {
+    0% {
+        background-position: 0% 45%;
+    }
+    50% {
+        background-position: 100% 56%;
+    }
+    100% {
+        background-position: 0% 45%;
+    }
+}
+@keyframes MainGradientAnimation {
+    0% {
+        background-position: 0% 45%;
+    }
+    50% {
+        background-position: 100% 56%;
+    }
+    100% {
+        background-position: 0% 45%;
+    }
 }

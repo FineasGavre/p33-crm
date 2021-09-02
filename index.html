@@ -9,7 +9,7 @@
             <div class="title-section">
                 <h1>Employee CRM</h1>
             </div>
-            <div class="new-employee-section">
+            <div class="card-section">
                 <h2>Add a new employee</h2>
                 <div class="form-group">
                     <div class="field">
@@ -25,6 +25,50 @@
                         <input name="email" type="email" />
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="field">
+                        <label for="sex">Sex</label>
+                        <select name="sex">
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other / I'd rather not say</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="birthdate">Birthdate</label>
+                        <input name="birthdate" type="date" />
+                    </div>
+                    <div class="field">
+                        <label for="picture">Profile Photo</label>
+                        <input name="picture" type="file" />
+                    </div>
+                </div>
+                <button id="addEmployeeButton">Add employee</button>
+            </div>
+            <div class="card-section">
+                <h2>Employees</h2>
+                <table id="employeesTable">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Sex</th>
+                            <th>Birthdate</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>Fineas Gavre</td>
+                            <td>fineasgavre@gmail.com</td>
+                            <td>Male</td>
+                            <td>08.08.2000</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
