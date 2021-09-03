@@ -228,11 +228,6 @@
             }
         }
 
-        if (profilePhoto == null) {
-            validationResponse.isValid = false
-            validationResponse.errors.push('Profile photo must be selected!')
-        }
-
         return validationResponse
     }
 
@@ -315,7 +310,7 @@
         const isProfilePhotoValid = readFileToDataUrl(uploadedPhoto, photoProcessedCallback)
 
         if (!isProfilePhotoValid) {
-            photoProcessedCallback(null)
+            photoProcessedCallback('')
         }
     }
 
