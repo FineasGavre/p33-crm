@@ -52,6 +52,17 @@
             </div>
             <div class="card-section">
                 <h2>Employees</h2>
+                <div class="form-group">
+                    <div class="field">
+                        <label for="sortBy"> Sort by </label>
+                        <select id="sortBy" name="sortBy">
+                            <option value="">Default order</option>
+                            <option value="ageInc">Age (increasing order)</option>
+                            <option value="ageDec">Age (decreasing order)</option>
+                        </select>
+                    </div>
+                </div>
+                <input id="searchBar" type="text" placeholder="Search for an employee..." />
                 <table id="employeesTable">
                     <thead>
                         <tr>

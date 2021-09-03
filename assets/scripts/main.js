@@ -4,6 +4,33 @@
 ;(function () {
     // Filters
     let filterByString = ''
+    let sortingCriteria = ''
+
+    // Sorting Methods
+    const sortingMethods = {
+        ageInc: ({ birthdate: birthdate1 }, { birthdate: birthdate2 }) => {
+            if (calculateAgeFromBirthdate(birthdate1) < calculateAgeFromBirthdate(birthdate2)) {
+                return -1
+            }
+
+            if (calculateAgeFromBirthdate(birthdate1) > calculateAgeFromBirthdate(birthdate2)) {
+                return 1
+            }
+
+            return 0
+        },
+        ageDec: ({ birthdate: birthdate1 }, { birthdate: birthdate2 }) => {
+            if (calculateAgeFromBirthdate(birthdate1) < calculateAgeFromBirthdate(birthdate2)) {
+                return 1
+            }
+
+            if (calculateAgeFromBirthdate(birthdate1) > calculateAgeFromBirthdate(birthdate2)) {
+                return -1
+            }
+
+            return 0
+        },
+    }
 
     // Data access
     const retrieveEmployeeArray = () => {
@@ -42,11 +69,17 @@
         const tableBodyElem = document.querySelector('#employeesTable tbody')
         tableBodyElem.innerHTML = ''
 
-        employees = employees.filter((employee) => {
-            const { firstName, lastName } = employee
-            const name = `${firstName} ${lastName}`
-            return name.toLowerCase().includes(filterByString.toLowerCase())
-        })
+        if (filterByString !== '') {
+            employees = employees.filter((employee) => {
+                const { firstName, lastName } = employee
+                const name = `${firstName} ${lastName}`
+                return name.toLowerCase().includes(filterByString.toLowerCase())
+            })
+        }
+
+        if (sortingCriteria !== '') {
+            employees = employees.sort(sortingMethods[sortingCriteria])
+        }
 
         employees.forEach((employee, index) => {
             tableBodyElem.appendChild(createEmployeeTableRow(employee, index))
@@ -170,6 +203,7 @@
     }
 
     const calculateAgeFromBirthdate = (birthdate) => {
+        birthdate = new Date(birthdate)
         const ageDiff = Date.now() - birthdate.getTime()
         const ageDate = new Date(ageDiff)
         return Math.abs(ageDate.getUTCFullYear() - 1970)
@@ -250,6 +284,11 @@
         retrieveAndDisplayEmployees()
     }
 
+    const onSortSelectInputChange = (event) => {
+        sortingCriteria = event.target.value
+        retrieveAndDisplayEmployees()
+    }
+
     const addEventListeners = () => {
         const addEmployeeButtonElem = document.querySelector('#addEmployeeButton')
         addEmployeeButtonElem.addEventListener('click', onAddEmployeeButtonClick)
@@ -259,6 +298,9 @@
 
         const searchBarElem = document.querySelector('#searchBar')
         searchBarElem.addEventListener('input', onFilterFieldInputChange)
+
+        const sortSelectElem = document.querySelector('#sortBy')
+        sortSelectElem.addEventListener('input', onSortSelectInputChange)
     }
 
     addEventListeners()
