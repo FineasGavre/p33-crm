@@ -5,6 +5,7 @@
     // Filters
     let filterByString = ''
     let filterBySex = ''
+    let filterByBirthdate = null
     let sortingCriteria = ''
 
     // Sorting Methods
@@ -102,6 +103,10 @@
 
         if (filterBySex !== '') {
             employees = employees.filter((employee) => employee.sex === filterBySex)
+        }
+
+        if (filterByBirthdate !== null) {
+            employees = employees.filter((employee) => employee.birthdate === filterByBirthdate)
         }
 
         if (sortingCriteria !== '') {
@@ -328,6 +333,20 @@
         retrieveAndDisplayEmployees()
     }
 
+    const onFilterByBirthdateFieldInputChange = (event) => {
+        const {
+            target: { value: dateString },
+        } = event
+
+        if (dateString === '') {
+            filterByBirthdate = null
+        } else {
+            filterByBirthdate = new Date(event.target.value).toISOString()
+        }
+
+        retrieveAndDisplayEmployees()
+    }
+
     const onSortSelectInputChange = (event) => {
         sortingCriteria = event.target.value
         retrieveAndDisplayEmployees()
@@ -345,6 +364,9 @@
 
         const filterBySexElem = document.querySelector('#filterBySex')
         filterBySexElem.addEventListener('input', onFilterBySexFieldInputChange)
+
+        const filterByBirthdateElem = document.querySelector('#filterByBirthdate')
+        filterByBirthdateElem.addEventListener('input', onFilterByBirthdateFieldInputChange)
 
         const sortSelectElem = document.querySelector('#sortBy')
         sortSelectElem.addEventListener('input', onSortSelectInputChange)
