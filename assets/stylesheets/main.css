@@ -67,10 +67,9 @@ td {
     flex-basis: 0;
 }
 
-.form-group > .field > label {
-}
-
-.form-group > .field > input {
+#employeesTable img {
+    height: 150px;
+    width: 150px;
 }
 
 /* Animated gradient background */

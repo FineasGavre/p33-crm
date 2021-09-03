@@ -39,10 +39,13 @@
     }
 
     const createEmployeeTableRow = (employee) => {
-        const { firstName, lastName, email, sex } = employee
+        const { firstName, lastName, email, sex, birthdate, profilePhoto } = employee
         const row = document.createElement('tr')
 
         const photoTd = document.createElement('td')
+        const imageElem = document.createElement('img')
+        imageElem.src = profilePhoto
+        photoTd.appendChild(imageElem)
 
         const nameTd = document.createElement('td')
         nameTd.textContent = `${firstName} ${lastName}`
@@ -63,7 +66,7 @@
 
     // Validation
     const validateEmployeeObject = (employee) => {
-        const { firstName, lastName, email, sex } = employee
+        const { firstName, lastName, email, sex, birthdate, profilePhoto } = employee
         const validationResponse = {
             isValid: true,
             errors: [],
@@ -89,9 +92,14 @@
             validationResponse.errors.push('Sex must be selected!')
         }
 
-        if (date == null || !isValidDate(date)) {
+        if (birthdate == null || !isValidDate(birthdate)) {
             validationResponse.isValid = false
-            validationResponse.errors.push('Birthdate must be entered.')
+            validationResponse.errors.push('Birthdate must be selected!')
+        }
+
+        if (profilePhoto == null) {
+            validationResponse.isValid = false
+            validationResponse.errors.push('Profile photo must be selected!')
         }
 
         return validationResponse
@@ -102,6 +110,21 @@
         return date instanceof Date && !isNaN(date)
     }
 
+    const readFileToDataUrl = (file, callback) => {
+        const reader = new FileReader()
+
+        reader.addEventListener('load', (event) => {
+            callback(event.target.result)
+        })
+
+        try {
+            reader.readAsDataURL(file)
+            return true
+        } catch (err) {
+            return false
+        }
+    }
+
     // Event Handlers
     const onAddEmployeeButtonClick = () => {
         const { value: firstName } = document.querySelector('#firstName')
@@ -109,24 +132,36 @@
         const { value: email } = document.querySelector('#email')
         const { value: sex } = document.querySelector('#sex')
         const { value: birthdateString } = document.querySelector('#birthdate')
+        const {
+            files: [uploadedPhoto],
+        } = document.querySelector('#picture')
 
         const birthdate = new Date(birthdateString)
 
-        const employee = {
-            firstName,
-            lastName,
-            email,
-            sex,
-            birthdate,
+        const photoProcessedCallback = (profilePhoto) => {
+            const employee = {
+                firstName,
+                lastName,
+                email,
+                sex,
+                birthdate,
+                profilePhoto,
+            }
+
+            const validation = validateEmployeeObject(employee)
+
+            if (validation.isValid) {
+                addNewEmployee(employee)
+                retrieveAndDisplayEmployees()
+            } else {
+                console.log('Invalid employee object.', validation.errors)
+            }
         }
 
-        const validation = validateEmployeeObject(employee)
+        const isProfilePhotoValid = readFileToDataUrl(uploadedPhoto, photoProcessedCallback)
 
-        if (validation.isValid) {
-            addNewEmployee(employee)
-            retrieveAndDisplayEmployees()
-        } else {
-            console.log('Invalid employee object.', validation.errors)
+        if (!isProfilePhotoValid) {
+            photoProcessedCallback(null)
         }
     }
 
