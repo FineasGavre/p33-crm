@@ -161,6 +161,7 @@
         const actionsTd = document.createElement('td')
         const removeButton = document.createElement('button')
         removeButton.setAttribute('data-remove', true)
+        removeButton.className = 'red'
         removeButton.textContent = 'X'
         actionsTd.appendChild(removeButton)
 

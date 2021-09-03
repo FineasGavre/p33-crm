@@ -14,7 +14,7 @@
                     <div class="card-header">
                         <h2>Add a new employee</h2>
                         <div class="spacer"></div>
-                        <button id="closeAddEmployeeModal">X</button>
+                        <button id="closeAddEmployeeModal" class="red">X</button>
                     </div>
                     <div class="error-list" id="errorListSection" style="display: none">
                         <h3 class="error-heading"><b>Oops! </b>Your form has the following errors:</h3>
@@ -23,15 +23,15 @@
                     <div class="form-group">
                         <div class="field">
                             <label for="firstName">First Name</label>
-                            <input id="firstName" name="firstName" type="text" />
+                            <input id="firstName" name="firstName" type="text" placeholder="John" />
                         </div>
                         <div class="field">
                             <label for="lastName">Last Name</label>
-                            <input id="lastName" name="lastName" type="text" />
+                            <input id="lastName" name="lastName" type="text" placeholder="Doe" />
                         </div>
                         <div class="field">
                             <label for="email">Email</label>
-                            <input id="email" name="email" type="email" />
+                            <input id="email" name="email" type="email" placeholder="john.doe@example.com" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -53,7 +53,7 @@
                             <input id="picture" name="picture" type="file" />
                         </div>
                     </div>
-                    <button id="addEmployeeButton">Add employee</button>
+                    <button id="addEmployeeButton" class="green">Add employee</button>
                 </div>
             </div>
 
@@ -61,7 +61,7 @@
                 <div class="card-header">
                     <h2>Employees</h2>
                     <div class="spacer"></div>
-                    <button id="toggleNewEmployeeModal">Add new employee</button>
+                    <button id="toggleNewEmployeeModal" class="green">Add a new employee</button>
                 </div>
                 <div class="form-group">
                     <div class="field">
@@ -97,7 +97,12 @@
                         </select>
                     </div>
                 </div>
-                <input id="searchBar" type="text" placeholder="Search for an employee..." />
+                <div class="form-group">
+                    <div class="field">
+                        <label for="searchBar">Filter by name</label>
+                        <input id="searchBar" type="text" placeholder="Search for an employee..." />
+                    </div>
+                </div>
                 <table id="employeesTable">
                     <thead>
                         <tr>

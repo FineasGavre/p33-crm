@@ -1,19 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap');
 
 :root {
     --image-size: 150px;
     --card-border-radius: 0.5rem;
     --image-border-radius: 50%;
+    --font-family: 'Inter', sans-serif, serif;
+    --regular-font-weight: 600;
+    --bold-font-weight: 700;
+
+    --sm-breakpoint: 800px;
 }
 
 html {
-    font-family: 'Inter', sans-serif, serif;
+    font-family: var(--font-family);
+    font-weight: var(--regular-font-weight);
+}
+
+button {
+    font-family: var(--font-family);
+    font-weight: var(--bold-font-weight);
 }
 
 h1,
 h2,
 h3 {
     margin: 0;
+    font-weight: inherit;
+}
+
+b {
+    font-weight: var(--bold-font-weight);
 }
 
 table,
@@ -22,6 +38,10 @@ td {
     border: 1px solid black;
     border-collapse: collapse;
     text-align: center;
+}
+
+ul {
+    margin: 0;
 }
 
 .wrapper {
@@ -60,12 +80,19 @@ td {
 
 .error-heading {
     color: rgb(207, 46, 46);
+    font-weight: 400;
 }
 
 .error-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+
     padding-left: 2rem;
     padding-right: 2rem;
-    padding-top: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+
     background-color: rgba(216, 148, 148, 0.651);
     border-radius: var(--card-border-radius);
 }
@@ -88,6 +115,45 @@ td {
 
 .card-header {
     display: inline-flex;
+    align-items: center;
+}
+
+button.green {
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    border-radius: var(--card-border-radius);
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    color: white;
+    background-color: #10b981;
+}
+
+button.green:hover {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #059669;
+}
+
+button.red {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+
+    border-radius: var(--card-border-radius);
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    color: white;
+    background-color: #ef4444;
+}
+
+button.red:hover {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #dc2626;
 }
 
 .spacer {
@@ -99,7 +165,7 @@ td {
     gap: 2rem;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: var(--sm-breakpoint)) {
     .form-group {
         flex-direction: column;
     }
@@ -139,6 +205,15 @@ td {
 
     flex-grow: 1;
     flex-basis: 0;
+}
+
+.form-group > .field input,
+.form-group > .field select {
+    padding: 0.5rem;
+    border-radius: var(--card-border-radius);
+
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 #employeesTable img {
