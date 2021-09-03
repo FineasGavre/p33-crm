@@ -4,6 +4,7 @@
 ;(function () {
     // Filters
     let filterByString = ''
+    let filterBySex = ''
     let sortingCriteria = ''
 
     // Sorting Methods
@@ -83,6 +84,14 @@
         const tableBodyElem = document.querySelector('#employeesTable tbody')
         tableBodyElem.innerHTML = ''
 
+        employees = applySortsAndFilters(employees)
+
+        employees.forEach((employee, index) => {
+            tableBodyElem.appendChild(createEmployeeTableRow(employee, index))
+        })
+    }
+
+    const applySortsAndFilters = (employees) => {
         if (filterByString !== '') {
             employees = employees.filter((employee) => {
                 const { firstName, lastName } = employee
@@ -91,13 +100,15 @@
             })
         }
 
+        if (filterBySex !== '') {
+            employees = employees.filter((employee) => employee.sex === filterBySex)
+        }
+
         if (sortingCriteria !== '') {
             employees = employees.sort(sortingMethods[sortingCriteria])
         }
 
-        employees.forEach((employee, index) => {
-            tableBodyElem.appendChild(createEmployeeTableRow(employee, index))
-        })
+        return employees
     }
 
     const createEmployeeTableRow = (employee, index) => {
@@ -117,7 +128,7 @@
         emailTd.textContent = email
 
         const sexTd = document.createElement('td')
-        sexTd.textContent = sex
+        sexTd.textContent = getSexAsPrintableString(sex)
 
         const birthdateTd = document.createElement('td')
         const mBirthdate = moment(birthdate)
@@ -238,6 +249,20 @@
         }
     }
 
+    const getSexAsPrintableString = (sex) => {
+        if (sex === 'male') {
+            return 'Male'
+        }
+
+        if (sex === 'female') {
+            return 'Female'
+        }
+
+        if (sex === 'unspecified') {
+            return 'Other / Preferred not to say'
+        }
+    }
+
     // Event Handlers
     const onAddEmployeeButtonClick = () => {
         hideErrorSection()
@@ -298,6 +323,11 @@
         retrieveAndDisplayEmployees()
     }
 
+    const onFilterBySexFieldInputChange = (event) => {
+        filterBySex = event.target.value
+        retrieveAndDisplayEmployees()
+    }
+
     const onSortSelectInputChange = (event) => {
         sortingCriteria = event.target.value
         retrieveAndDisplayEmployees()
@@ -312,6 +342,9 @@
 
         const searchBarElem = document.querySelector('#searchBar')
         searchBarElem.addEventListener('input', onFilterFieldInputChange)
+
+        const filterBySexElem = document.querySelector('#filterBySex')
+        filterBySexElem.addEventListener('input', onFilterBySexFieldInputChange)
 
         const sortSelectElem = document.querySelector('#sortBy')
         sortSelectElem.addEventListener('input', onSortSelectInputChange)

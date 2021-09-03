@@ -34,9 +34,9 @@
                         <label for="sex">Sex</label>
                         <select id="sex" name="sex">
                             <option value="">Please select an option...</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>Other / I'd rather not say</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other / I'd rather not say</option>
                         </select>
                     </div>
                     <div class="field">
@@ -60,6 +60,17 @@
                             <option value="ageInc">Age (increasing order)</option>
                             <option value="ageDec">Age (decreasing order)</option>
                             <option value="name">Name (alphabetically)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="field">
+                        <label for="filterBySex">Filter by sex</label>
+                        <select id="filterBySex" name="filterBySex">
+                            <option value="">Default</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other / Unspecified</option>
                         </select>
                     </div>
                 </div>
