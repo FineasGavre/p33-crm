@@ -89,7 +89,17 @@
             validationResponse.errors.push('Sex must be selected!')
         }
 
+        if (date == null || !isValidDate(date)) {
+            validationResponse.isValid = false
+            validationResponse.errors.push('Birthdate must be entered.')
+        }
+
         return validationResponse
+    }
+
+    // Helpers
+    const isValidDate = (date) => {
+        return date instanceof Date && !isNaN(date)
     }
 
     // Event Handlers
@@ -98,12 +108,16 @@
         const { value: lastName } = document.querySelector('#lastName')
         const { value: email } = document.querySelector('#email')
         const { value: sex } = document.querySelector('#sex')
+        const { value: birthdateString } = document.querySelector('#birthdate')
+
+        const birthdate = new Date(birthdateString)
 
         const employee = {
             firstName,
             lastName,
             email,
             sex,
+            birthdate,
         }
 
         const validation = validateEmployeeObject(employee)
