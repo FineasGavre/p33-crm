@@ -2,6 +2,9 @@
     Main entrypoint
 */
 ;(function () {
+    // Filters
+    let filterByString = ''
+
     // Data access
     const retrieveEmployeeArray = () => {
         const storedData = localStorage.getItem('employees')
@@ -38,6 +41,12 @@
     const updateEmployeeTableUI = (employees) => {
         const tableBodyElem = document.querySelector('#employeesTable tbody')
         tableBodyElem.innerHTML = ''
+
+        employees = employees.filter((employee) => {
+            const { firstName, lastName } = employee
+            const name = `${firstName} ${lastName}`
+            return name.toLowerCase().includes(filterByString.toLowerCase())
+        })
 
         employees.forEach((employee, index) => {
             tableBodyElem.appendChild(createEmployeeTableRow(employee, index))
@@ -223,23 +232,33 @@
         }
     }
 
+    const onRemoveEmployeeButtonClick = (event) => {
+        const { target: button } = event
+
+        if (button.tagName == 'BUTTON' && button.getAttribute('data-remove') == 'true') {
+            const parentTd = button.parentElement
+            const parentTr = parentTd.parentElement
+            const index = parentTr.getAttribute('data-employee-index')
+
+            removeEmployeeFromArrayByIndex(index)
+            retrieveAndDisplayEmployees()
+        }
+    }
+
+    const onFilterFieldInputChange = (event) => {
+        filterByString = event.target.value
+        retrieveAndDisplayEmployees()
+    }
+
     const addEventListeners = () => {
         const addEmployeeButtonElem = document.querySelector('#addEmployeeButton')
         addEmployeeButtonElem.addEventListener('click', onAddEmployeeButtonClick)
 
         const employeesTable = document.querySelector('#employeesTable')
-        employeesTable.addEventListener('click', function (event) {
-            const { target: button } = event
+        employeesTable.addEventListener('click', onRemoveEmployeeButtonClick)
 
-            if (button.tagName == 'BUTTON' && button.getAttribute('data-remove') == 'true') {
-                const parentTd = button.parentElement
-                const parentTr = parentTd.parentElement
-                const index = parentTr.getAttribute('data-employee-index')
-
-                removeEmployeeFromArrayByIndex(index)
-                retrieveAndDisplayEmployees()
-            }
-        })
+        const searchBarElem = document.querySelector('#searchBar')
+        searchBarElem.addEventListener('input', onFilterFieldInputChange)
     }
 
     addEventListeners()
