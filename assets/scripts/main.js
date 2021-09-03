@@ -77,6 +77,30 @@
         return row
     }
 
+    const displayErrors = (errors) => {
+        const errorListSection = document.querySelector('#errorListSection')
+
+        if (errors.length === 0) {
+            errorListSection.style = 'display: none'
+            return
+        }
+
+        errorListSection.style = ''
+
+        const errorListUl = document.querySelector('#errorListSection ul')
+        errorListUl.innerHTML = ''
+
+        errors.forEach((error) => {
+            const errorLi = document.createElement('li')
+            errorLi.textContent = error
+            errorListUl.appendChild(errorLi)
+        })
+    }
+
+    const hideErrorSection = () => {
+        displayErrors([])
+    }
+
     // Validation
     const validateEmployeeObject = (employee) => {
         const { firstName, lastName, email, sex, birthdate, profilePhoto } = employee
@@ -123,6 +147,8 @@
         return date instanceof Date && !isNaN(date)
     }
 
+    const calculateAgeFromBirthdate = (birthdate) => {}
+
     const readFileToDataUrl = (file, callback) => {
         const reader = new FileReader()
 
@@ -140,6 +166,8 @@
 
     // Event Handlers
     const onAddEmployeeButtonClick = () => {
+        hideErrorSection()
+
         const { value: firstName } = document.querySelector('#firstName')
         const { value: lastName } = document.querySelector('#lastName')
         const { value: email } = document.querySelector('#email')
@@ -167,7 +195,7 @@
                 addNewEmployee(employee)
                 retrieveAndDisplayEmployees()
             } else {
-                console.log('Invalid employee object.', validation.errors)
+                displayErrors(validation.errors)
             }
         }
 

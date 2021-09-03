@@ -1,4 +1,6 @@
 :root {
+    --image-size: 150px;
+    --border-radius: 0.5rem;
 }
 
 html {
@@ -48,9 +50,21 @@ td {
     padding-right: 2rem;
 
     border: 1px solid rgba(0, 0, 0, 0.65);
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius);
 
     background-color: white;
+}
+
+.error-heading {
+    color: rgb(207, 46, 46);
+}
+
+.error-list {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 1rem;
+    background-color: rgba(216, 148, 148, 0.651);
+    border-radius: var(--border-radius);
 }
 
 .form-group {
@@ -101,8 +115,8 @@ td {
 }
 
 #employeesTable img {
-    height: 150px;
-    width: 150px;
+    height: var(--image-size);
+    width: var(--image-size);
 }
 
 /* Animated gradient background */
