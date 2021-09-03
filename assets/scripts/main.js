@@ -122,6 +122,14 @@
         if (email == null || email == '') {
             validationResponse.isValid = false
             validationResponse.errors.push('Email must not be empty!')
+        } else {
+            const emailRegexp =
+                /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+            if (!emailRegexp.test(email)) {
+                validationResponse.isValid = false
+                validationResponse.errors.push('Email must be in the correct format!')
+            }
         }
 
         if (sex == null || sex == '') {
@@ -132,11 +140,11 @@
         if (birthdate == null || !isValidDate(birthdate)) {
             validationResponse.isValid = false
             validationResponse.errors.push('Birthdate must be selected!')
-        }
-
-        if (calculateAgeFromBirthdate(birthdate) < 16) {
-            validationResponse.isValid = false
-            validationResponse.errors.push('The employee must be 16 or older.')
+        } else {
+            if (calculateAgeFromBirthdate(birthdate) < 16) {
+                validationResponse.isValid = false
+                validationResponse.errors.push('The employee must be 16 or older!')
+            }
         }
 
         if (profilePhoto == null) {
