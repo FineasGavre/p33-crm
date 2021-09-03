@@ -134,6 +134,11 @@
             validationResponse.errors.push('Birthdate must be selected!')
         }
 
+        if (calculateAgeFromBirthdate(birthdate) < 16) {
+            validationResponse.isValid = false
+            validationResponse.errors.push('The employee must be 16 or older.')
+        }
+
         if (profilePhoto == null) {
             validationResponse.isValid = false
             validationResponse.errors.push('Profile photo must be selected!')
@@ -147,7 +152,11 @@
         return date instanceof Date && !isNaN(date)
     }
 
-    const calculateAgeFromBirthdate = (birthdate) => {}
+    const calculateAgeFromBirthdate = (birthdate) => {
+        const ageDiff = Date.now() - birthdate.getTime()
+        const ageDate = new Date(ageDiff)
+        return Math.abs(ageDate.getUTCFullYear() - 1970)
+    }
 
     const readFileToDataUrl = (file, callback) => {
         const reader = new FileReader()
