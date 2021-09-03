@@ -64,6 +64,8 @@
         sexTd.textContent = sex
 
         const birthdateTd = document.createElement('td')
+        const mBirthdate = moment(birthdate)
+        birthdateTd.textContent = mBirthdate.format('D MMMM YYYY')
 
         const actionsTd = document.createElement('td')
         const removeButton = document.createElement('button')
