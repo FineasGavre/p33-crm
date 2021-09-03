@@ -1,6 +1,7 @@
 :root {
     --image-size: 150px;
-    --border-radius: 0.5rem;
+    --card-border-radius: 0.5rem;
+    --image-border-radius: 50%;
 }
 
 html {
@@ -50,7 +51,7 @@ td {
     padding-right: 2rem;
 
     border: 1px solid rgba(0, 0, 0, 0.65);
-    border-radius: var(--border-radius);
+    border-radius: var(--card-border-radius);
 
     background-color: white;
 }
@@ -64,7 +65,7 @@ td {
     padding-right: 2rem;
     padding-top: 1rem;
     background-color: rgba(216, 148, 148, 0.651);
-    border-radius: var(--border-radius);
+    border-radius: var(--card-border-radius);
 }
 
 .form-group {
@@ -117,6 +118,8 @@ td {
 #employeesTable img {
     height: var(--image-size);
     width: var(--image-size);
+
+    border-radius: var(--image-border-radius);
 }
 
 /* Animated gradient background */
