@@ -9,49 +9,60 @@
             <div class="title-section">
                 <h1>Employee CRM</h1>
             </div>
-            <div class="card-section">
-                <h2>Add a new employee</h2>
-                <div class="error-list" id="errorListSection" style="display: none">
-                    <h3 class="error-heading"><b>Oops! </b>Your form has the following errors:</h3>
-                    <ul></ul>
+            <div id="addEmployeeModal" class="modal">
+                <div class="card-section modal-content">
+                    <div class="card-header">
+                        <h2>Add a new employee</h2>
+                        <div class="spacer"></div>
+                        <button id="closeAddEmployeeModal">X</button>
+                    </div>
+                    <div class="error-list" id="errorListSection" style="display: none">
+                        <h3 class="error-heading"><b>Oops! </b>Your form has the following errors:</h3>
+                        <ul></ul>
+                    </div>
+                    <div class="form-group">
+                        <div class="field">
+                            <label for="firstName">First Name</label>
+                            <input id="firstName" name="firstName" type="text" />
+                        </div>
+                        <div class="field">
+                            <label for="lastName">Last Name</label>
+                            <input id="lastName" name="lastName" type="text" />
+                        </div>
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input id="email" name="email" type="email" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="field">
+                            <label for="sex">Sex</label>
+                            <select id="sex" name="sex">
+                                <option value="">Please select an option...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other / I'd rather not say</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="birthdate">Birthdate</label>
+                            <input id="birthdate" name="birthdate" type="date" />
+                        </div>
+                        <div class="field">
+                            <label for="picture">Profile Photo</label>
+                            <input id="picture" name="picture" type="file" />
+                        </div>
+                    </div>
+                    <button id="addEmployeeButton">Add employee</button>
                 </div>
-                <div class="form-group">
-                    <div class="field">
-                        <label for="firstName">First Name</label>
-                        <input id="firstName" name="firstName" type="text" />
-                    </div>
-                    <div class="field">
-                        <label for="lastName">Last Name</label>
-                        <input id="lastName" name="lastName" type="text" />
-                    </div>
-                    <div class="field">
-                        <label for="email">Email</label>
-                        <input id="email" name="email" type="email" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="field">
-                        <label for="sex">Sex</label>
-                        <select id="sex" name="sex">
-                            <option value="">Please select an option...</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other / I'd rather not say</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="birthdate">Birthdate</label>
-                        <input id="birthdate" name="birthdate" type="date" />
-                    </div>
-                    <div class="field">
-                        <label for="picture">Profile Photo</label>
-                        <input id="picture" name="picture" type="file" />
-                    </div>
-                </div>
-                <button id="addEmployeeButton">Add employee</button>
             </div>
+
             <div class="card-section">
-                <h2>Employees</h2>
+                <div class="card-header">
+                    <h2>Employees</h2>
+                    <div class="spacer"></div>
+                    <button id="toggleNewEmployeeModal">Add new employee</button>
+                </div>
                 <div class="form-group">
                     <div class="field">
                         <label for="sortBy"> Sort by </label>

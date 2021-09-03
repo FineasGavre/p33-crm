@@ -77,6 +77,16 @@
     }
 
     // UI display methods
+    const displayAddEmployeeModal = () => {
+        const addEmployeeModalElem = document.querySelector('#addEmployeeModal')
+        addEmployeeModalElem.style.display = 'block'
+    }
+
+    const hideAddEmployeeModal = () => {
+        const addEmployeeModalElem = document.querySelector('#addEmployeeModal')
+        addEmployeeModalElem.style.display = ''
+    }
+
     const retrieveAndDisplayEmployees = () => {
         const employees = retrieveEmployeeArray()
         updateEmployeeTableUI(employees)
@@ -301,6 +311,7 @@
 
             if (validation.isValid) {
                 addNewEmployee(employee)
+                hideAddEmployeeModal()
                 retrieveAndDisplayEmployees()
             } else {
                 displayErrors(validation.errors)
@@ -312,6 +323,10 @@
         if (!isProfilePhotoValid) {
             photoProcessedCallback('')
         }
+    }
+
+    const onDisplayAddEmployeeModalButtonClick = () => {
+        displayAddEmployeeModal()
     }
 
     const onRemoveEmployeeButtonClick = (event) => {
@@ -361,9 +376,24 @@
         retrieveAndDisplayEmployees()
     }
 
+    const onCloseAddEmployeeModalButtonClick = (event) => {
+        hideAddEmployeeModal()
+    }
+
+    const onWindowClickCloseModal = (event) => {
+        const modalElem = document.querySelector('#addEmployeeModal')
+
+        if (event.target == modalElem) {
+            hideAddEmployeeModal()
+        }
+    }
+
     const addEventListeners = () => {
         const addEmployeeButtonElem = document.querySelector('#addEmployeeButton')
         addEmployeeButtonElem.addEventListener('click', onAddEmployeeButtonClick)
+
+        const toggleNewEmployeeModalElem = document.querySelector('#toggleNewEmployeeModal')
+        toggleNewEmployeeModalElem.addEventListener('click', onDisplayAddEmployeeModalButtonClick)
 
         const employeesTable = document.querySelector('#employeesTable')
         employeesTable.addEventListener('click', onRemoveEmployeeButtonClick)
@@ -382,6 +412,11 @@
 
         const sortSelectElem = document.querySelector('#sortBy')
         sortSelectElem.addEventListener('input', onSortSelectInputChange)
+
+        const closeAddEmployeeModalButtonElem = document.querySelector('#closeAddEmployeeModal')
+        closeAddEmployeeModalButtonElem.addEventListener('click', onCloseAddEmployeeModalButtonClick)
+
+        window.addEventListener('click', onWindowClickCloseModal)
     }
 
     addEventListeners()
