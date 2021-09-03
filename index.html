@@ -67,7 +67,7 @@
                     <div class="field">
                         <label for="filterBySex">Filter by sex</label>
                         <select id="filterBySex" name="filterBySex">
-                            <option value="">Default</option>
+                            <option value="">Show all</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                             <option value="other">Other / Unspecified</option>
@@ -76,6 +76,14 @@
                     <div class="field">
                         <label for="filterByBirthdate">Filter by birthdate</label>
                         <input id="filterByBirthdate" name="filterByBirthdate" type="date" />
+                    </div>
+                    <div class="field">
+                        <label for="filterByPhoto">Filter by photo</label>
+                        <select id="filterByPhoto" name="filterByPhoto">
+                            <option value="">All</option>
+                            <option value="hasPhoto">Show only with profile picture</option>
+                            <option value="noPhoto">Show only without profile picture</option>
+                        </select>
                     </div>
                 </div>
                 <input id="searchBar" type="text" placeholder="Search for an employee..." />

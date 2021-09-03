@@ -6,6 +6,7 @@
     let filterByString = ''
     let filterBySex = ''
     let filterByBirthdate = null
+    let filterByPhoto = ''
     let sortingCriteria = ''
 
     // Sorting Methods
@@ -107,6 +108,14 @@
 
         if (filterByBirthdate !== null) {
             employees = employees.filter((employee) => employee.birthdate === filterByBirthdate)
+        }
+
+        if (filterByPhoto !== '') {
+            if (filterByPhoto == 'hasPhoto') {
+                employees = employees.filter((employee) => employee.profilePhoto !== '')
+            } else if (filterByPhoto == 'noPhoto') {
+                employees = employees.filter((employee) => employee.profilePhoto === '')
+            }
         }
 
         if (sortingCriteria !== '') {
@@ -347,6 +356,11 @@
         retrieveAndDisplayEmployees()
     }
 
+    const onFilterByPhotoFieldInputChange = (event) => {
+        filterByPhoto = event.target.value
+        retrieveAndDisplayEmployees()
+    }
+
     const onSortSelectInputChange = (event) => {
         sortingCriteria = event.target.value
         retrieveAndDisplayEmployees()
@@ -367,6 +381,9 @@
 
         const filterByBirthdateElem = document.querySelector('#filterByBirthdate')
         filterByBirthdateElem.addEventListener('input', onFilterByBirthdateFieldInputChange)
+
+        const filterByPhotoElem = document.querySelector('#filterByPhoto')
+        filterByPhotoElem.addEventListener('input', onFilterByPhotoFieldInputChange)
 
         const sortSelectElem = document.querySelector('#sortBy')
         sortSelectElem.addEventListener('input', onSortSelectInputChange)
