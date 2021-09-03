@@ -23,6 +23,12 @@
         saveEmployeeArray(employees)
     }
 
+    const removeEmployeeFromArrayByIndex = (index) => {
+        const employees = retrieveEmployeeArray()
+        employees.splice(index, 1)
+        saveEmployeeArray(employees)
+    }
+
     // UI display methods
     const retrieveAndDisplayEmployees = () => {
         const employees = retrieveEmployeeArray()
@@ -33,14 +39,15 @@
         const tableBodyElem = document.querySelector('#employeesTable tbody')
         tableBodyElem.innerHTML = ''
 
-        for (const employee of employees) {
-            tableBodyElem.appendChild(createEmployeeTableRow(employee))
-        }
+        employees.forEach((employee, index) => {
+            tableBodyElem.appendChild(createEmployeeTableRow(employee, index))
+        })
     }
 
-    const createEmployeeTableRow = (employee) => {
+    const createEmployeeTableRow = (employee, index) => {
         const { firstName, lastName, email, sex, birthdate, profilePhoto } = employee
         const row = document.createElement('tr')
+        row.setAttribute('data-employee-index', index)
 
         const photoTd = document.createElement('td')
         const imageElem = document.createElement('img')
@@ -59,6 +66,10 @@
         const birthdateTd = document.createElement('td')
 
         const actionsTd = document.createElement('td')
+        const removeButton = document.createElement('button')
+        removeButton.setAttribute('data-remove', true)
+        removeButton.textContent = 'X'
+        actionsTd.appendChild(removeButton)
 
         row.append(photoTd, nameTd, emailTd, sexTd, birthdateTd, actionsTd)
         return row
@@ -168,6 +179,20 @@
     const addEventListeners = () => {
         const addEmployeeButtonElem = document.querySelector('#addEmployeeButton')
         addEmployeeButtonElem.addEventListener('click', onAddEmployeeButtonClick)
+
+        const employeesTable = document.querySelector('#employeesTable')
+        employeesTable.addEventListener('click', function (event) {
+            const { target: button } = event
+
+            if (button.tagName == 'BUTTON' && button.getAttribute('data-remove') == 'true') {
+                const parentTd = button.parentElement
+                const parentTr = parentTd.parentElement
+                const index = parentTr.getAttribute('data-employee-index')
+
+                removeEmployeeFromArrayByIndex(index)
+                retrieveAndDisplayEmployees()
+            }
+        })
     }
 
     addEventListeners()
