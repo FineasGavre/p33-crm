@@ -30,6 +30,20 @@
 
             return 0
         },
+        name: ({ firstName: firstName1, lastName: lastName1 }, { firstName: firstName2, lastName: lastName2 }) => {
+            const name1 = `${firstName1} ${lastName1}`
+            const name2 = `${firstName2} ${lastName2}`
+
+            if (name1 < name2) {
+                return -1
+            }
+
+            if (name1 > name2) {
+                return 1
+            }
+
+            return 0
+        },
     }
 
     // Data access
