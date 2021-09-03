@@ -160,9 +160,12 @@
 
         const actionsTd = document.createElement('td')
         const removeButton = document.createElement('button')
+        const iconElem = document.createElement('i')
         removeButton.setAttribute('data-remove', true)
         removeButton.className = 'red'
-        removeButton.textContent = 'X'
+        iconElem.className = 'fa fa-times'
+
+        removeButton.appendChild(iconElem)
         actionsTd.appendChild(removeButton)
 
         row.append(photoTd, nameTd, emailTd, sexTd, birthdateTd, actionsTd)
