@@ -5,7 +5,8 @@
     // Filters
     let filterByString = ''
     let filterBySex = ''
-    let filterByBirthdate = null
+    let filterByBirthdateStart = null
+    let filterByBirthdateEnd = null
     let filterByPhoto = ''
     let sortingCriteria = ''
 
@@ -116,8 +117,16 @@
             employees = employees.filter((employee) => employee.sex === filterBySex)
         }
 
-        if (filterByBirthdate !== null) {
-            employees = employees.filter((employee) => employee.birthdate === filterByBirthdate)
+        if (filterByBirthdateStart !== null && filterByBirthdateEnd !== null) {
+            employees = employees.filter((employee) => {
+                const birthdateEmployee = moment(employee.birthdate)
+                const birthdate1 = moment(filterByBirthdateStart)
+                const birthdate2 = moment(filterByBirthdateEnd)
+
+                console.log(birthdateEmployee, birthdate1, birthdate2)
+
+                return birthdateEmployee.isBetween(birthdate1, birthdate2)
+            })
         }
 
         if (filterByPhoto !== '') {
@@ -356,15 +365,29 @@
         retrieveAndDisplayEmployees()
     }
 
-    const onFilterByBirthdateFieldInputChange = (event) => {
+    const onFilterByBirthdateStartFieldInputChange = (event) => {
         const {
             target: { value: dateString },
         } = event
 
         if (dateString === '') {
-            filterByBirthdate = null
+            filterByBirthdateStart = null
         } else {
-            filterByBirthdate = new Date(event.target.value).toISOString()
+            filterByBirthdateStart = new Date(event.target.value).toISOString()
+        }
+
+        retrieveAndDisplayEmployees()
+    }
+
+    const onFilterByBirthdateEndFieldInputChange = (event) => {
+        const {
+            target: { value: dateString },
+        } = event
+
+        if (dateString === '') {
+            filterByBirthdateEnd = null
+        } else {
+            filterByBirthdateEnd = new Date(event.target.value).toISOString()
         }
 
         retrieveAndDisplayEmployees()
@@ -402,7 +425,8 @@
         addEventListenerToElement('click', '#employeesTable', onRemoveEmployeeButtonClick)
         addEventListenerToElement('input', '#searchBar', onFilterFieldInputChange)
         addEventListenerToElement('input', '#filterBySex', onFilterBySexFieldInputChange)
-        addEventListenerToElement('input', '#filterByBirthdate', onFilterByBirthdateFieldInputChange)
+        addEventListenerToElement('input', '#filterByBirthdateStart', onFilterByBirthdateStartFieldInputChange)
+        addEventListenerToElement('input', '#filterByBirthdateEnd', onFilterByBirthdateEndFieldInputChange)
         addEventListenerToElement('input', '#filterByPhoto', onFilterByPhotoFieldInputChange)
         addEventListenerToElement('input', '#sortBy', onSortSelectInputChange)
         addEventListenerToElement('click', '#closeAddEmployeeModal', onCloseAddEmployeeModalButtonClick)

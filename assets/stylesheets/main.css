@@ -165,7 +165,7 @@ button.red:hover {
     gap: 2rem;
 }
 
-@media screen and (max-width: var(--sm-breakpoint)) {
+@media screen and (max-width: 800px) {
     .form-group {
         flex-direction: column;
     }
