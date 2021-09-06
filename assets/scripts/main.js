@@ -392,33 +392,20 @@
         }
     }
 
+    const addEventListenerToElement = (eventType, elementSelector, eventHandler) => {
+        document.querySelector(elementSelector).addEventListener(eventType, eventHandler)
+    }
+
     const addEventListeners = () => {
-        const addEmployeeButtonElem = document.querySelector('#addEmployeeButton')
-        addEmployeeButtonElem.addEventListener('click', onAddEmployeeButtonClick)
-
-        const toggleNewEmployeeModalElem = document.querySelector('#toggleNewEmployeeModal')
-        toggleNewEmployeeModalElem.addEventListener('click', onDisplayAddEmployeeModalButtonClick)
-
-        const employeesTable = document.querySelector('#employeesTable')
-        employeesTable.addEventListener('click', onRemoveEmployeeButtonClick)
-
-        const searchBarElem = document.querySelector('#searchBar')
-        searchBarElem.addEventListener('input', onFilterFieldInputChange)
-
-        const filterBySexElem = document.querySelector('#filterBySex')
-        filterBySexElem.addEventListener('input', onFilterBySexFieldInputChange)
-
-        const filterByBirthdateElem = document.querySelector('#filterByBirthdate')
-        filterByBirthdateElem.addEventListener('input', onFilterByBirthdateFieldInputChange)
-
-        const filterByPhotoElem = document.querySelector('#filterByPhoto')
-        filterByPhotoElem.addEventListener('input', onFilterByPhotoFieldInputChange)
-
-        const sortSelectElem = document.querySelector('#sortBy')
-        sortSelectElem.addEventListener('input', onSortSelectInputChange)
-
-        const closeAddEmployeeModalButtonElem = document.querySelector('#closeAddEmployeeModal')
-        closeAddEmployeeModalButtonElem.addEventListener('click', onCloseAddEmployeeModalButtonClick)
+        addEventListenerToElement('click', '#addEmployeeButton', onAddEmployeeButtonClick)
+        addEventListenerToElement('click', '#toggleNewEmployeeModal', onDisplayAddEmployeeModalButtonClick)
+        addEventListenerToElement('click', '#employeesTable', onRemoveEmployeeButtonClick)
+        addEventListenerToElement('input', '#searchBar', onFilterFieldInputChange)
+        addEventListenerToElement('input', '#filterBySex', onFilterBySexFieldInputChange)
+        addEventListenerToElement('input', '#filterByBirthdate', onFilterByBirthdateFieldInputChange)
+        addEventListenerToElement('input', '#filterByPhoto', onFilterByPhotoFieldInputChange)
+        addEventListenerToElement('input', '#sortBy', onSortSelectInputChange)
+        addEventListenerToElement('click', '#closeAddEmployeeModal', onCloseAddEmployeeModalButtonClick)
 
         window.addEventListener('click', onWindowClickCloseModal)
     }
