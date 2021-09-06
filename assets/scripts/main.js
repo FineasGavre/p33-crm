@@ -123,8 +123,6 @@
                 const birthdate1 = moment(filterByBirthdateStart)
                 const birthdate2 = moment(filterByBirthdateEnd)
 
-                console.log(birthdateEmployee, birthdate1, birthdate2)
-
                 return birthdateEmployee.isBetween(birthdate1, birthdate2)
             })
         }
@@ -310,6 +308,12 @@
 
         const birthdate = new Date(birthdateString)
 
+        const isProfilePhotoValid = readFileToDataUrl(uploadedPhoto, photoProcessedCallback)
+
+        if (!isProfilePhotoValid) {
+            photoProcessedCallback('')
+        }
+
         const photoProcessedCallback = (profilePhoto) => {
             const employee = {
                 firstName,
@@ -329,12 +333,6 @@
             } else {
                 displayErrors(validation.errors)
             }
-        }
-
-        const isProfilePhotoValid = readFileToDataUrl(uploadedPhoto, photoProcessedCallback)
-
-        if (!isProfilePhotoValid) {
-            photoProcessedCallback('')
         }
     }
 
