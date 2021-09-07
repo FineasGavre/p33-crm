@@ -1,16 +1,23 @@
 import moment from 'moment'
+import { Employee } from './data-access/employee.interface'
+import { FirestoreAccess } from './data-access/firestore-access'
+
+type SortingMethods = { [key: string]: (arg0: Employee, arg1: Employee) => -1 | 0 | 1 }
+type PrintedErrors = { isValid: boolean; errors: string[] }
 
 export default function Main() {
+    const firestoreAccess = new FirestoreAccess()
+
     // Filters
     let filterByString = ''
     let filterBySex = ''
-    let filterByBirthdateStart = null
-    let filterByBirthdateEnd = null
+    let filterByBirthdateStart: string | null = null
+    let filterByBirthdateEnd: string | null = null
     let filterByPhoto = ''
     let sortingCriteria = ''
 
     // Sorting Methods
-    const sortingMethods = {
+    const sortingMethods: SortingMethods = {
         ageInc: ({ birthdate: birthdate1 }, { birthdate: birthdate2 }) => {
             if (calculateAgeFromBirthdate(birthdate1) < calculateAgeFromBirthdate(birthdate2)) {
                 return -1
@@ -50,7 +57,7 @@ export default function Main() {
     }
 
     // Data access
-    const retrieveEmployeeArray = () => {
+    const retrieveEmployeeArray = async (): Promise<Employee[]> => {
         const storedData = localStorage.getItem('employees')
 
         if (storedData === null) {
@@ -60,39 +67,37 @@ export default function Main() {
         }
     }
 
-    const saveEmployeeArray = (employees) => {
+    const saveEmployeeArray = (employees: Employee[]) => {
         localStorage.setItem('employees', JSON.stringify(employees))
     }
 
-    const addNewEmployee = (employee) => {
-        const employees = retrieveEmployeeArray()
-        employees.push(employee)
-        saveEmployeeArray(employees)
+    const addNewEmployee = async (employee: Employee) => {
+        await firestoreAccess.addEmployee(employee)
     }
 
-    const removeEmployeeFromArrayByIndex = (index) => {
-        const employees = retrieveEmployeeArray()
+    const removeEmployeeFromArrayByIndex = async (index: number) => {
+        const employees = await retrieveEmployeeArray()
         employees.splice(index, 1)
         saveEmployeeArray(employees)
     }
 
     // UI display methods
     const displayAddEmployeeModal = () => {
-        const addEmployeeModalElem = document.querySelector('#addEmployeeModal')
+        const addEmployeeModalElem = document.querySelector('#addEmployeeModal') as HTMLDivElement
         addEmployeeModalElem.style.display = 'block'
     }
 
     const hideAddEmployeeModal = () => {
-        const addEmployeeModalElem = document.querySelector('#addEmployeeModal')
+        const addEmployeeModalElem = document.querySelector('#addEmployeeModal') as HTMLDivElement
         addEmployeeModalElem.style.display = ''
     }
 
-    const retrieveAndDisplayEmployees = () => {
-        const employees = retrieveEmployeeArray()
+    const retrieveAndDisplayEmployees = async () => {
+        const employees = await firestoreAccess.getAllEmployees()
         updateEmployeeTableUI(employees)
     }
 
-    const updateEmployeeTableUI = (employees) => {
+    const updateEmployeeTableUI = (employees: Employee[]) => {
         const tableBodyElem = document.querySelector('#employeesTable tbody')
         tableBodyElem.innerHTML = ''
 
@@ -103,7 +108,7 @@ export default function Main() {
         })
     }
 
-    const applySortsAndFilters = (employees) => {
+    const applySortsAndFilters = (employees: Employee[]) => {
         if (filterByString !== '') {
             employees = employees.filter((employee) => {
                 const { firstName, lastName } = employee
@@ -141,10 +146,10 @@ export default function Main() {
         return employees
     }
 
-    const createEmployeeTableRow = (employee, index) => {
+    const createEmployeeTableRow = (employee: Employee, index: number) => {
         const { firstName, lastName, email, sex, birthdate, profilePhoto } = employee
         const row = document.createElement('tr')
-        row.setAttribute('data-employee-index', index)
+        row.setAttribute('data-employee-index', index.toString())
 
         const photoTd = document.createElement('td')
         const imageElem = document.createElement('img')
@@ -167,7 +172,7 @@ export default function Main() {
         const actionsTd = document.createElement('td')
         const removeButton = document.createElement('button')
         const iconElem = document.createElement('i')
-        removeButton.setAttribute('data-remove', true)
+        removeButton.setAttribute('data-remove', 'true')
         removeButton.className = 'red'
         iconElem.className = 'fa fa-times'
 
@@ -178,15 +183,15 @@ export default function Main() {
         return row
     }
 
-    const displayErrors = (errors) => {
-        const errorListSection = document.querySelector('#errorListSection')
+    const displayErrors = (errors: string[]) => {
+        const errorListSection = document.querySelector('#errorListSection') as HTMLDivElement
 
         if (errors.length === 0) {
-            errorListSection.style = 'display: none'
+            errorListSection.style.display = 'none'
             return
         }
 
-        errorListSection.style = ''
+        errorListSection.style.display = 'block'
 
         const errorListUl = document.querySelector('#errorListSection ul')
         errorListUl.innerHTML = ''
@@ -203,9 +208,9 @@ export default function Main() {
     }
 
     // Validation
-    const validateEmployeeObject = (employee) => {
+    const validateEmployeeObject = (employee: Employee) => {
         const { firstName, lastName, email, sex, birthdate, profilePhoto } = employee
-        const validationResponse = {
+        const validationResponse: PrintedErrors = {
             isValid: true,
             errors: [],
         }
@@ -252,18 +257,19 @@ export default function Main() {
     }
 
     // Helpers
-    const isValidDate = (date) => {
+    const isValidDate = (date: Date) => {
+        // @ts-ignore
         return date instanceof Date && !isNaN(date)
     }
 
-    const calculateAgeFromBirthdate = (birthdate) => {
+    const calculateAgeFromBirthdate = (birthdate: string | Date) => {
         birthdate = new Date(birthdate)
         const ageDiff = Date.now() - birthdate.getTime()
         const ageDate = new Date(ageDiff)
         return Math.abs(ageDate.getUTCFullYear() - 1970)
     }
 
-    const readFileToDataUrl = (file, callback) => {
+    const readFileToDataUrl = (file: File, callback: (arg0: string | ArrayBuffer) => void) => {
         const reader = new FileReader()
 
         reader.addEventListener('load', (event) => {
@@ -278,7 +284,7 @@ export default function Main() {
         }
     }
 
-    const getSexAsPrintableString = (sex) => {
+    const getSexAsPrintableString = (sex: string) => {
         if (sex === 'male') {
             return 'Male'
         }
@@ -296,24 +302,18 @@ export default function Main() {
     const onAddEmployeeButtonClick = () => {
         hideErrorSection()
 
-        const { value: firstName } = document.querySelector('#firstName')
-        const { value: lastName } = document.querySelector('#lastName')
-        const { value: email } = document.querySelector('#email')
-        const { value: sex } = document.querySelector('#sex')
-        const { value: birthdateString } = document.querySelector('#birthdate')
+        const { value: firstName } = document.querySelector('#firstName') as HTMLInputElement
+        const { value: lastName } = document.querySelector('#lastName') as HTMLInputElement
+        const { value: email } = document.querySelector('#email') as HTMLInputElement
+        const { value: sex } = document.querySelector('#sex') as HTMLInputElement
+        const { value: birthdateString } = document.querySelector('#birthdate') as HTMLInputElement
         const {
             files: [uploadedPhoto],
-        } = document.querySelector('#picture')
+        } = document.querySelector('#picture') as HTMLInputElement
 
         const birthdate = new Date(birthdateString)
 
-        const isProfilePhotoValid = readFileToDataUrl(uploadedPhoto, photoProcessedCallback)
-
-        if (!isProfilePhotoValid) {
-            photoProcessedCallback('')
-        }
-
-        const photoProcessedCallback = (profilePhoto) => {
+        const photoProcessedCallback = (profilePhoto: string) => {
             const employee = {
                 firstName,
                 lastName,
@@ -333,78 +333,95 @@ export default function Main() {
                 displayErrors(validation.errors)
             }
         }
+
+        const isProfilePhotoValid = readFileToDataUrl(uploadedPhoto, photoProcessedCallback)
+
+        if (!isProfilePhotoValid) {
+            photoProcessedCallback('')
+        }
     }
 
     const onDisplayAddEmployeeModalButtonClick = () => {
         displayAddEmployeeModal()
     }
 
-    const onRemoveEmployeeButtonClick = (event) => {
-        const { target: button } = event
+    const onRemoveEmployeeButtonClick = (event: Event) => {
+        const { target: targetElement } = event
+        const button = targetElement as HTMLButtonElement
 
         if (button.tagName == 'BUTTON' && button.getAttribute('data-remove') == 'true') {
             const parentTd = button.parentElement
             const parentTr = parentTd.parentElement
             const index = parentTr.getAttribute('data-employee-index')
 
-            removeEmployeeFromArrayByIndex(index)
+            removeEmployeeFromArrayByIndex(parseInt(index))
             retrieveAndDisplayEmployees()
         }
     }
 
-    const onFilterFieldInputChange = (event) => {
-        filterByString = event.target.value
+    const onFilterFieldInputChange = (event: Event) => {
+        const inputElem = event.target as HTMLInputElement
+        filterByString = inputElem.value
+
         retrieveAndDisplayEmployees()
     }
 
-    const onFilterBySexFieldInputChange = (event) => {
-        filterBySex = event.target.value
+    const onFilterBySexFieldInputChange = (event: Event) => {
+        const inputElem = event.target as HTMLInputElement
+        filterBySex = inputElem.value
+
         retrieveAndDisplayEmployees()
     }
 
-    const onFilterByBirthdateStartFieldInputChange = (event) => {
-        const {
-            target: { value: dateString },
-        } = event
+    const onFilterByBirthdateStartFieldInputChange = (event: Event) => {
+        const { target: targetElem } = event
+        const inputTarget = targetElem as HTMLInputElement
+
+        const dateString = inputTarget.value
 
         if (dateString === '') {
             filterByBirthdateStart = null
         } else {
-            filterByBirthdateStart = new Date(event.target.value).toISOString()
+            filterByBirthdateStart = new Date(dateString).toISOString()
         }
 
         retrieveAndDisplayEmployees()
     }
 
-    const onFilterByBirthdateEndFieldInputChange = (event) => {
-        const {
-            target: { value: dateString },
-        } = event
+    const onFilterByBirthdateEndFieldInputChange = (event: Event) => {
+        const { target: targetElem } = event
+        const inputTarget = targetElem as HTMLInputElement
+
+        const dateString = inputTarget.value
 
         if (dateString === '') {
             filterByBirthdateEnd = null
         } else {
-            filterByBirthdateEnd = new Date(event.target.value).toISOString()
+            filterByBirthdateEnd = new Date(dateString).toISOString()
         }
 
         retrieveAndDisplayEmployees()
     }
 
-    const onFilterByPhotoFieldInputChange = (event) => {
-        filterByPhoto = event.target.value
+    const onFilterByPhotoFieldInputChange = (event: Event) => {
+        const inputElem = event.target as HTMLInputElement
+        filterByPhoto = inputElem.value
+
         retrieveAndDisplayEmployees()
     }
 
-    const onSortSelectInputChange = (event) => {
-        sortingCriteria = event.target.value
+    const onSortSelectInputChange = (event: Event) => {
+        const inputElem = event.target as HTMLInputElement
+        sortingCriteria = inputElem.value
+
         retrieveAndDisplayEmployees()
     }
 
-    const onCloseAddEmployeeModalButtonClick = (event) => {
+    const onCloseAddEmployeeModalButtonClick = () => {
         hideAddEmployeeModal()
     }
 
-    const onWindowClickCloseModal = (event) => {
+    const onWindowClickCloseModal = (event: Event) => {
         const modalElem = document.querySelector('#addEmployeeModal')
 
         if (event.target == modalElem) {
@@ -412,7 +429,7 @@ export default function Main() {
         }
     }
 
-    const addEventListenerToElement = (eventType, elementSelector, eventHandler) => {
+    const addEventListenerToElement = (eventType: string, elementSelector: string, eventHandler: (event?: Event) => void) => {
         document.querySelector(elementSelector).addEventListener(eventType, eventHandler)
     }
 
