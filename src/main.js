@@ -1,7 +1,6 @@
-/* 
-    Main entrypoint
-*/
-;(function () {
+import moment from 'moment'
+
+export default function Main() {
     // Filters
     let filterByString = ''
     let filterBySex = ''
@@ -434,4 +433,4 @@
 
     addEventListeners()
     retrieveAndDisplayEmployees()
-})()
+}
