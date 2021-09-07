@@ -1,11 +1,13 @@
 import moment from 'moment'
 import { Employee } from './data-access/employee.interface'
+import { EmployeeValidator } from './validation/employee-validator'
 import { FirestoreAccess } from './data-access/firestore-access'
+import { addEventListenerToElement, calculateAgeFromBirthdate, getSexAsPrintableString, readFileToDataUrl } from './utils/utils'
 
 type SortingMethods = { [key: string]: (arg0: Employee, arg1: Employee) => -1 | 0 | 1 }
-type PrintedErrors = { isValid: boolean; errors: string[] }
 
 export default function Main() {
+    const employeeValidator = new EmployeeValidator()
     const firestoreAccess = new FirestoreAccess()
 
     // Filters
@@ -207,97 +209,6 @@ export default function Main() {
         displayErrors([])
     }
 
-    // Validation
-    const validateEmployeeObject = (employee: Employee) => {
-        const { firstName, lastName, email, sex, birthdate, profilePhoto } = employee
-        const validationResponse: PrintedErrors = {
-            isValid: true,
-            errors: [],
-        }
-
-        if (firstName == null || firstName == '') {
-            validationResponse.isValid = false
-            validationResponse.errors.push('First name must not be empty!')
-        }
-
-        if (lastName == null || lastName == '') {
-            validationResponse.isValid = false
-            validationResponse.errors.push('Last name must not be empty!')
-        }
-
-        if (email == null || email == '') {
-            validationResponse.isValid = false
-            validationResponse.errors.push('Email must not be empty!')
-        } else {
-            const emailRegexp =
-                /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-            if (!emailRegexp.test(email)) {
-                validationResponse.isValid = false
-                validationResponse.errors.push('Email must be in the correct format!')
-            }
-        }
-
-        if (sex == null || sex == '') {
-            validationResponse.isValid = false
-            validationResponse.errors.push('Sex must be selected!')
-        }
-
-        if (birthdate == null || !isValidDate(birthdate)) {
-            validationResponse.isValid = false
-            validationResponse.errors.push('Birthdate must be selected!')
-        } else {
-            if (calculateAgeFromBirthdate(birthdate) < 16) {
-                validationResponse.isValid = false
-                validationResponse.errors.push('The employee must be 16 or older!')
-            }
-        }
-
-        return validationResponse
-    }
-
-    // Helpers
-    const isValidDate = (date: Date) => {
-        // @ts-ignore
-        return date instanceof Date && !isNaN(date)
-    }
-
-    const calculateAgeFromBirthdate = (birthdate: string | Date) => {
-        birthdate = new Date(birthdate)
-        const ageDiff = Date.now() - birthdate.getTime()
-        const ageDate = new Date(ageDiff)
-        return Math.abs(ageDate.getUTCFullYear() - 1970)
-    }
-
-    const readFileToDataUrl = (file: File, callback: (arg0: string | ArrayBuffer) => void) => {
-        const reader = new FileReader()
-
-        reader.addEventListener('load', (event) => {
-            callback(event.target.result)
-        })
-
-        try {
-            reader.readAsDataURL(file)
-            return true
-        } catch (err) {
-            return false
-        }
-    }
-
-    const getSexAsPrintableString = (sex: string) => {
-        if (sex === 'male') {
-            return 'Male'
-        }
-
-        if (sex === 'female') {
-            return 'Female'
-        }
-
-        if (sex === 'unspecified') {
-            return 'Other / Preferred not to say'
-        }
-    }
-
     // Event Handlers
     const onAddEmployeeButtonClick = () => {
         hideErrorSection()
@@ -323,7 +234,7 @@ export default function Main() {
                 profilePhoto,
             }
 
-            const validation = validateEmployeeObject(employee)
+            const validation = employeeValidator.validateEmployeeObject(employee)
 
             if (validation.isValid) {
                 addNewEmployee(employee)
@@ -427,10 +338,6 @@ export default function Main() {
         if (event.target == modalElem) {
             hideAddEmployeeModal()
         }
-    }
-
-    const addEventListenerToElement = (eventType: string, elementSelector: string, eventHandler: (event?: Event) => void) => {
-        document.querySelector(elementSelector).addEventListener(eventType, eventHandler)
     }
 
     const addEventListeners = () => {
