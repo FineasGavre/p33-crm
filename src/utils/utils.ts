@@ -10,19 +10,20 @@ export function calculateAgeFromBirthdate(birthdate: string | Date) {
     return Math.abs(ageDate.getUTCFullYear() - 1970)
 }
 
-export function readFileToDataUrl(file: File, callback: (dataUri: string | ArrayBuffer) => void) {
-    const reader = new FileReader()
+export async function readFileToDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
 
-    reader.addEventListener('load', (event) => {
-        callback(event.target.result)
+        reader.addEventListener('load', (event) => {
+            resolve(event.target.result as string)
+        })
+
+        try {
+            reader.readAsDataURL(file)
+        } catch (err) {
+            reject(err)
+        }
     })
-
-    try {
-        reader.readAsDataURL(file)
-        return true
-    } catch (err) {
-        return false
-    }
 }
 
 export function getSexAsPrintableString(sex: string) {

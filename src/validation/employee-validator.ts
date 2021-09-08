@@ -4,11 +4,16 @@ import { calculateAgeFromBirthdate, isValidDate } from '../utils/utils'
 export type ValidationResult = { isValid: boolean; errors: string[] }
 
 export class EmployeeValidator {
+    static readonly PASSING_VALIDATION: ValidationResult = {
+        isValid: true,
+        errors: [],
+    }
+
     validateEmployeeObject(employee: Employee) {
-        const { firstName, lastName, email, sex, birthdate, profilePhoto } = employee
-        const validationResponse = {
+        const { firstName, lastName, email, sex, birthdate } = employee
+        const validationResponse: ValidationResult = {
             isValid: true,
-            errors: Array<string>(),
+            errors: [],
         }
 
         if (firstName == null || firstName == '') {
