@@ -19,7 +19,6 @@ function syncEmployeesToUI() {
     tableBodyElem.innerHTML = ''
 
     employees.forEach((employee) => {
-        console.log(employee)
         tableBodyElem.appendChild(createEmployeeTableRow(employee))
     })
 }
@@ -173,7 +172,7 @@ function addEventListeners() {
     addEventListenerToElement('click', '#employeesTable', onRemoveEmployeeButtonClick)
 }
 
-function retrieveAndSyncEmployees() {
+export function retrieveAndSyncEmployees() {
     retrieveEmployees().then(() => {
         syncEmployeesToUI()
     })

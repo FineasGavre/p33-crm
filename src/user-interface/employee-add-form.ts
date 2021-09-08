@@ -2,6 +2,7 @@ import { Employee } from '../data-access/employee.interface'
 import { FirestoreAccess } from '../data-access/firestore-access'
 import { addEventListenerToElement, readFileToDataUrl } from '../utils/utils'
 import { EmployeeValidator, ValidationResult } from '../validation/employee-validator'
+import { retrieveAndSyncEmployees } from './employee-table'
 
 const employeeValidator = new EmployeeValidator()
 const firestoreAccess = new FirestoreAccess()
@@ -124,6 +125,8 @@ async function onAddEmployeeButtonClick() {
     if (currentValidationResult.isValid) {
         await firestoreAccess.addEmployee(employeeModel)
         closeModal()
+
+        retrieveAndSyncEmployees()
     }
 }
 
