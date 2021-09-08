@@ -1,6 +1,5 @@
 export function isValidDate(date: Date) {
-    // @ts-ignore
-    return date instanceof Date && !isNaN(date)
+    return date instanceof Date
 }
 
 export function calculateAgeFromBirthdate(birthdate: string | Date) {

@@ -5,16 +5,11 @@ import { addEventListenerToElement, getSexAsPrintableString } from '../utils/uti
 
 const firestoreAccess = new FirestoreAccess()
 
-let employees: Employee[] = []
 let sortingCriteria: FilterAndSortCriteria = {
     filter: {},
 }
 
-async function retrieveEmployees() {
-    employees = await firestoreAccess.getAllEmployees(sortingCriteria)
-}
-
-function syncEmployeesToUI() {
+function syncEmployeesToUI(employees: Employee[]) {
     const tableBodyElem = document.querySelector('#employeesTable tbody')
     tableBodyElem.innerHTML = ''
 
@@ -70,7 +65,6 @@ async function onRemoveEmployeeButtonClick(event: Event) {
         const employeeId = parentTr.getAttribute('data-employee-id')
 
         await firestoreAccess.deleteEmployeeWithId(employeeId)
-        retrieveAndSyncEmployees()
     }
 }
 
@@ -78,7 +72,7 @@ function onFilterFieldInputChange(event: Event) {
     const inputElem = event.target as HTMLInputElement
     sortingCriteria.filter.name = inputElem.value
 
-    retrieveAndSyncEmployees()
+    updateModifiersInFirestore()
 }
 
 function onFilterBySexFieldInputChange(event: Event) {
@@ -90,7 +84,7 @@ function onFilterBySexFieldInputChange(event: Event) {
         sortingCriteria.filter.sex = inputElem.value as 'male' | 'female' | 'other'
     }
 
-    retrieveAndSyncEmployees()
+    updateModifiersInFirestore()
 }
 
 function onFilterByBirthdateStartFieldInputChange(event: Event) {
@@ -111,7 +105,7 @@ function onFilterByBirthdateStartFieldInputChange(event: Event) {
         }
     }
 
-    retrieveAndSyncEmployees()
+    updateModifiersInFirestore()
 }
 
 function onFilterByBirthdateEndFieldInputChange(event: Event) {
@@ -132,7 +126,7 @@ function onFilterByBirthdateEndFieldInputChange(event: Event) {
         }
     }
 
-    retrieveAndSyncEmployees()
+    updateModifiersInFirestore()
 }
 
 function onFilterByPhotoFieldInputChange(event: Event) {
@@ -147,7 +141,7 @@ function onFilterByPhotoFieldInputChange(event: Event) {
         sortingCriteria.filter.photo = false
     }
 
-    retrieveAndSyncEmployees()
+    updateModifiersInFirestore()
 }
 
 function onSortSelectInputChange(event: Event) {
@@ -159,7 +153,7 @@ function onSortSelectInputChange(event: Event) {
         sortingCriteria.sort = inputElem.value as 'ageInc' | 'ageDec' | 'name'
     }
 
-    retrieveAndSyncEmployees()
+    updateModifiersInFirestore()
 }
 
 function addEventListeners() {
@@ -172,10 +166,14 @@ function addEventListeners() {
     addEventListenerToElement('click', '#employeesTable', onRemoveEmployeeButtonClick)
 }
 
-export function retrieveAndSyncEmployees() {
-    retrieveEmployees().then(() => {
-        syncEmployeesToUI()
-    })
+function updateModifiersInFirestore() {
+    firestoreAccess.changeCurrentConstraints(sortingCriteria)
+}
+
+function retrieveAndSyncEmployees() {
+    firestoreAccess.listenToAllEmployees((employees) => {
+        syncEmployeesToUI(employees)
+    }, sortingCriteria)
 }
 
 export function setupEmployeeTable() {

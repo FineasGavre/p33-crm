@@ -1,5 +1,18 @@
 import { app } from '../utils/firebase'
-import { addDoc, collection, deleteDoc, doc, Firestore, getDoc, getDocs, getFirestore, orderBy, query, QueryConstraint, where } from '@firebase/firestore'
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    Firestore,
+    getFirestore,
+    orderBy,
+    query,
+    QueryConstraint,
+    where,
+    onSnapshot,
+    Unsubscribe,
+} from '@firebase/firestore'
 import { Employee } from './employee.interface'
 import { employeeConverter } from './employee.converter'
 
@@ -18,6 +31,10 @@ export type FilterAndSortCriteria = {
 
 export class FirestoreAccess {
     private db: Firestore
+
+    private currentModifiers?: FilterAndSortCriteria = null
+    private currentUnsubscribe?: Unsubscribe = null
+    private currentUpdateFn?: (employees: Employee[]) => void = null
 
     constructor() {
         this.db = getFirestore(app)
@@ -68,18 +85,31 @@ export class FirestoreAccess {
         return queryConstraints
     }
 
-    async getAllEmployees(modifiers?: FilterAndSortCriteria): Promise<Employee[]> {
-        console.log(modifiers)
+    listenToAllEmployees(onUpdate: (employees: Employee[]) => void, modifiers?: FilterAndSortCriteria) {
+        this.currentModifiers = modifiers
+        this.currentUpdateFn = onUpdate
+
+        this.setupFirestoreUpdates()
+    }
+
+    private setupFirestoreUpdates() {
         const queryConstraints: QueryConstraint[] = []
 
-        if (modifiers !== undefined) {
-            queryConstraints.push(...this.generateQueryConstraints(modifiers))
+        if (this.currentModifiers !== null) {
+            queryConstraints.push(...this.generateQueryConstraints(this.currentModifiers))
         }
 
         const q = query(collection(this.db, 'employees'), ...queryConstraints)
+        this.currentUnsubscribe = onSnapshot(q, (snapshot) => {
+            this.currentUpdateFn(snapshot.docs.map((e) => employeeConverter.fromFirestore(e)))
+        })
+    }
 
-        const querySnapshot = await getDocs(q)
-        return querySnapshot.docs.map((e) => employeeConverter.fromFirestore(e))
+    changeCurrentConstraints(modifiers?: FilterAndSortCriteria) {
+        this.currentUnsubscribe()
+        this.currentModifiers = modifiers
+
+        this.setupFirestoreUpdates()
     }
 
     async addEmployee(employee: Employee) {
