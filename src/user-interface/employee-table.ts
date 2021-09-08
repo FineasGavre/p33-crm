@@ -3,6 +3,7 @@ import { Employee } from '../data-access/employee.interface'
 import { FilterAndSortCriteria, FirestoreAccess } from '../data-access/firestore-access'
 import { addEventListenerToElement, getSexAsPrintableString } from '../utils/utils'
 
+const placeholderPhotoSrc = './assets/images/placeholder-profile-photo.png'
 const firestoreAccess = new FirestoreAccess()
 
 let sortingCriteria: FilterAndSortCriteria = {
@@ -25,7 +26,13 @@ function createEmployeeTableRow(employee: Employee) {
 
     const photoTd = document.createElement('td')
     const imageElem = document.createElement('img')
-    imageElem.src = profilePhoto
+
+    if (profilePhoto === 'placeholder') {
+        imageElem.src = placeholderPhotoSrc
+    } else {
+        imageElem.src = profilePhoto
+    }
+
     photoTd.appendChild(imageElem)
 
     const nameTd = document.createElement('td')

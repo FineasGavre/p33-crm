@@ -55,9 +55,9 @@ export class FirestoreAccess {
 
             if (modifiers.filter.photo !== undefined) {
                 if (modifiers.filter.photo) {
-                    queryConstraints.push(where('profilePhoto', '!=', ''))
+                    queryConstraints.push(where('profilePhoto', '!=', 'placeholder'))
                 } else {
-                    queryConstraints.push(where('profilePhoto', '==', ''))
+                    queryConstraints.push(where('profilePhoto', '==', 'placeholder'))
                 }
             }
 

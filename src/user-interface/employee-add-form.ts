@@ -36,7 +36,7 @@ async function updateModelFromUI() {
     try {
         profilePhoto = await readFileToDataUrl(uploadedPhoto)
     } catch (e) {
-        profilePhoto = ''
+        profilePhoto = 'placeholder'
     }
 
     employeeModel = {
